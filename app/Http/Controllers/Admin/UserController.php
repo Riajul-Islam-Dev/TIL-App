@@ -14,6 +14,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -21,6 +22,7 @@ class UserController extends Controller
     {
         $companies = Company::all();
         $menuLinks = MenuLink::all();
+
         return view('admin.users.create', ['companies' => $companies, 'menuLinks' => $menuLinks]);
     }
 
@@ -87,26 +89,48 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $companies = Company::all();
+        $menuLinks = MenuLink::all();
+
+        return view('admin.users.edit', compact('user', 'companies', 'menuLinks'));
     }
 
     public function update(Request $request, User $user)
     {
-        // Validation
-        $request->validate([
+        // Validation rules
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'user_type' => 'required|string',
-        ]);
+            'company_id' => 'required|exists:companies,company_id',
+            'status' => 'required|in:0,1',
+            'menu_permitted' => 'array',
+            'menu_permitted.*' => 'exists:menu_links,menu_id',
+        ];
 
+        // Custom validation error messages
+        $messages = [
+            'menu_permitted.*.exists' => 'Invalid menu permission selected.',
+        ];
+
+        $request->validate($rules, $messages);
+
+        // Update the user's information
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'user_type' => $request->input('user_type'),
+            'company_id' => $request->input('company_id'),
+            'status' => $request->input('status'),
+            // Handle the menu_permitted field similarly to the store method
+            'menu_permitted' => implode(',', $request->input('menu_permitted', ['1'])),
         ]);
 
-        return redirect()->route('admin.users.index');
+        // You can also handle the menu permissions here if needed.
+
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
+
 
     public function destroy(User $user)
     {

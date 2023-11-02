@@ -93,7 +93,7 @@
                                 Permissions</label>
                             <div class="space-y-2">
                                 @foreach ($menuLinks as $menuLink)
-                                    <label class="inline-flex items-center pr-1 bg-indigo-600">
+                                    <label class="inline-flex items-center pr-1 bg-gray-500">
                                         <input type="checkbox" name="menu_permitted[]" value="{{ $menuLink->menu_id }}"
                                             class="form-checkbox h-3 w-3 text-indigo-600">
                                         <span class="ml-2">{{ $menuLink->menu_name }}</span>

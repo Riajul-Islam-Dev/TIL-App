@@ -45,7 +45,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Edit a user
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
 
     // Delete a user
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
@@ -64,7 +64,7 @@ Route::middleware(['auth', 'admin'])->prefix('menu-link')->group(function () {
 
     // Edit a menu link
     Route::get('/menu_links/{menu_link}/edit', [MenuLinkController::class, 'edit'])->name('admin.menu_links.edit');
-    Route::put('/menu_links/{menu_link}', [MenuLinkController::class, 'update'])->name('admin.menu_links.update');
+    Route::patch('/menu_links/{menu_link}', [MenuLinkController::class, 'update'])->name('admin.menu_links.update');
 
     // Delete a menu link
     Route::delete('/menu_links/{menu_link}', [MenuLinkController::class, 'destroy'])->name('admin.menu_links.destroy');
@@ -84,7 +84,7 @@ Route::middleware(['auth', 'admin'])->prefix('company')->group(function () {
 
     // Edit a menu link
     Route::get('/companies/{company}/edit', [CompanyController::class, 'edit'])->name('admin.companies.edit');
-    Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('admin.companies.update');
+    Route::patch('/companies/{company}', [CompanyController::class, 'update'])->name('admin.companies.update');
 
     // Delete a menu link
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
