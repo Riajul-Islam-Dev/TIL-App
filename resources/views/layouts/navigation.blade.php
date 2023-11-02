@@ -4,22 +4,14 @@
         <div class="flex justify-between h-16">
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-nav-link>
-                @if (auth()->user()->isAdmin())
-                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('users.index')">
-                        {{ __('Users Index') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.menu_links.index')" :active="request()->routeIs('admin.menu_links.index')">
-                        {{ __('Menu Links Index') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.companies.index')" :active="request()->routeIs('admin.companies.index')">
-                        {{ __('Companies Index') }}
-                    </x-nav-link>
-                @endif
+                @foreach (auth()->user()->permittedMenuLinks() as $menuLink)
+                    @if ($menuLink->menu_type === 'top nav')
+                        <x-nav-link :href="route($menuLink->url)" :active="request()->routeIs($menuLink->url)">
+                            {{ $menuLink->menu_name }}
+                        </x-nav-link>
+                    @endif
+                @endforeach
             </div>
-
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -78,15 +70,13 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            @if (auth()->user()->isAdmin())
-                <!-- Check if the authenticated user is an admin -->
-                <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('users.index')">
-                    {{ __('Users Index') }}
-                </x-nav-link>
-            @endif
+            @foreach (auth()->user()->permittedMenuLinks() as $menuLink)
+                @if ($menuLink->menu_type === 'top nav')
+                    <x-nav-link :href="route($menuLink->url)" :active="request()->routeIs($menuLink->url)">
+                        {{ $menuLink->menu_name }}
+                    </x-nav-link>
+                @endif
+            @endforeach
         </div>
 
         <!-- Responsive Settings Options -->

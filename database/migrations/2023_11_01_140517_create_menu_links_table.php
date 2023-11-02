@@ -15,6 +15,7 @@ class CreateMenuLinksTable extends Migration
             $table->id();
             $table->integer('menu_id')->unique()->required();
             $table->string('menu_name')->unique()->required();
+            $table->string('menu_type')->required();
             $table->string('url')->unique()->required();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->integer('order')->default(0);

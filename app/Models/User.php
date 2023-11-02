@@ -17,8 +17,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'name',
         'email',
+        'company_id',
+        'menu_permitted',
         'password',
         'user_type', // Add the user_type field to the fillable attributes
     ];
@@ -51,5 +54,12 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->user_type === 'Admin';
+    }
+
+    public function permittedMenuLinks()
+    {
+        $menuPermitted = explode(',', $this->menu_permitted);
+
+        return MenuLink::whereIn('menu_id', $menuPermitted)->get();
     }
 }
