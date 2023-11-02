@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\MenuLinkController;
+use App\Http\Controllers\Admin\CompanyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,7 +60,7 @@ Route::middleware(['auth', 'admin'])->prefix('menu-link')->group(function () {
     Route::post('/menu_links', [MenuLinkController::class, 'store'])->name('admin.menu_links.store');
 
     // View a menu link
-    Route::get('/menu_links/{menu_link}', [MenuLinkController::class, 'show'])->name('menu_links.show');
+    Route::get('/menu_links/{menu_link}', [MenuLinkController::class, 'show'])->name('admin.menu_links.show');
 
     // Edit a menu link
     Route::get('/menu_links/{menu_link}/edit', [MenuLinkController::class, 'edit'])->name('admin.menu_links.edit');
@@ -70,6 +71,26 @@ Route::middleware(['auth', 'admin'])->prefix('menu-link')->group(function () {
 
     // List all menu links
     Route::get('/menu_links', [MenuLinkController::class, 'index'])->name('admin.menu_links.index');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('company')->group(function () {
+    Route::resource('companies', CompanyController::class);
+    // Create a new menu link
+    Route::get('/companies/create', [CompanyController::class, 'create'])->name('admin.companies.create');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('admin.companies.store');
+
+    // View a menu link
+    Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('admin.companies.show');
+
+    // Edit a menu link
+    Route::get('/companies/{company}/edit', [CompanyController::class, 'edit'])->name('admin.companies.edit');
+    Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('admin.companies.update');
+
+    // Delete a menu link
+    Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('admin.companies.destroy');
+
+    // List all menu links
+    Route::get('/companies', [CompanyController::class, 'index'])->name('admin.companies.index');
 });
 
 require __DIR__ . '/auth.php';

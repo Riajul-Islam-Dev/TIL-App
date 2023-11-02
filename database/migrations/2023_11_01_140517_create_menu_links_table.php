@@ -13,9 +13,9 @@ class CreateMenuLinksTable extends Migration
     {
         Schema::create('menu_links', function (Blueprint $table) {
             $table->id();
-            $table->integer('menu_id')->unique()->nullable(false);
-            $table->string('menu_name')->unique()->nullable(false);
-            $table->string('url')->unique()->nullable(false);
+            $table->integer('menu_id')->unique()->required();
+            $table->string('menu_name')->unique()->required();
+            $table->string('url')->unique()->required();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();
