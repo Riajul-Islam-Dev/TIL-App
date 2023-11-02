@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\MenuLinkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,12 +35,41 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    // Create a new user
+    Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+
+    // View a user
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show');
+
+    // Edit a user
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+
+    // Delete a user
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+    // List all users
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('menu-link')->group(function () {
+    // Create a new menu link
+    Route::get('/menu_links/create', [MenuLinkController::class, 'create'])->name('admin.menu_links.create');
+    Route::post('/menu_links', [MenuLinkController::class, 'store'])->name('admin.menu_links.store');
+
+    // View a menu link
+    Route::get('/menu_links/{menu_link}', [MenuLinkController::class, 'show'])->name('menu_links.show');
+
+    // Edit a menu link
+    Route::get('/menu_links/{menu_link}/edit', [MenuLinkController::class, 'edit'])->name('admin.menu_links.edit');
+    Route::put('/menu_links/{menu_link}', [MenuLinkController::class, 'update'])->name('admin.menu_links.update');
+
+    // Delete a menu link
+    Route::delete('/menu_links/{menu_link}', [MenuLinkController::class, 'destroy'])->name('admin.menu_links.destroy');
+
+    // List all menu links
+    Route::get('/menu_links', [MenuLinkController::class, 'index'])->name('admin.menu_links.index');
 });
 
 require __DIR__ . '/auth.php';

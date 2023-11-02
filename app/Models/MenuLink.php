@@ -15,6 +15,7 @@ class MenuLink extends Model
      * @var array
      */
     protected $fillable = [
+        'menu_id',
         'menu_name', // Add any additional attributes you want to mass-assign
         'url',
         'parent_id',

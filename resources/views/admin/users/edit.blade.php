@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h1 class="text-2xl font-semibold">Edit User: {{ $user->name }}</h1>
-                    <form method="post" action="{{ route('users.update', $user) }}">
+                    <form method="post" action="{{ route('admin.users.update', $user) }}">
                         @csrf
                         @method('PATCH')
 
