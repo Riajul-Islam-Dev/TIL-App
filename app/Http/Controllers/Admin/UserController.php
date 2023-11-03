@@ -28,7 +28,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // Validation rules
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -40,14 +39,12 @@ class UserController extends Controller
             'menu_permitted.*' => 'exists:menu_links,menu_id',
         ];
 
-        // Custom validation error messages
         $messages = [
             'menu_permitted.*.exists' => 'Invalid menu permission selected.',
         ];
 
         $request->validate($rules, $messages);
 
-        // Find the latest user_id and extract the increment value
         $latestUser = User::latest('user_id')->first();
         $increment = 1;
 
@@ -56,16 +53,12 @@ class UserController extends Controller
             $increment = (int)explode('-', $latestUserId)[1] + 1;
         }
 
-        // Format the user_id
         $formattedUserId = 'u-' . str_pad($increment, 3, '0', STR_PAD_LEFT);
 
-        // Hash the password
         $hashedPassword = Hash::make($request->input('password'));
 
-        // Convert menu_permitted array to a comma-separated string or set it to "1" if empty
         $menu_permitted = implode(',', $request->input('menu_permitted', ['1']));
 
-        // Create the user
         User::create([
             'user_id' => $formattedUserId,
             'name' => $request->input('name'),
@@ -76,8 +69,6 @@ class UserController extends Controller
             'status' => $request->input('status'),
             'menu_permitted' => $menu_permitted,
         ]);
-
-        // You can also handle the menu permissions here if needed.
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
@@ -97,7 +88,6 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // Validation rules
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -108,29 +98,34 @@ class UserController extends Controller
             'menu_permitted.*' => 'exists:menu_links,menu_id',
         ];
 
-        // Custom validation error messages
         $messages = [
             'menu_permitted.*.exists' => 'Invalid menu permission selected.',
         ];
 
+        if ($request->input('password') != null) {
+            $rules['password'] = 'string|min:6';
+        }
+
         $request->validate($rules, $messages);
 
-        // Update the user's information
-        $user->update([
+        $data = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'user_type' => $request->input('user_type'),
             'company_id' => $request->input('company_id'),
             'status' => $request->input('status'),
-            // Handle the menu_permitted field similarly to the store method
-            'menu_permitted' => implode(',', $request->input('menu_permitted', ['1'])),
-        ]);
+        ];
 
-        // You can also handle the menu permissions here if needed.
+        if ($request->has('password')) {
+            $data['password'] = bcrypt($request->input('password'));
+        }
+
+        $data['menu_permitted'] = implode(',', $request->input('menu_permitted', ['1']));
+
+        $user->update($data);
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
-
 
     public function destroy(User $user)
     {

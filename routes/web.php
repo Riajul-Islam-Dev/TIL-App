@@ -64,7 +64,7 @@ Route::middleware(['auth', 'admin'])->prefix('menu-link')->group(function () {
 
     // Edit a menu link
     Route::get('/menu_links/{menu_link}/edit', [MenuLinkController::class, 'edit'])->name('admin.menu_links.edit');
-    Route::patch('/menu_links/{menu_link}', [MenuLinkController::class, 'update'])->name('admin.menu_links.update');
+    Route::put('/menu_links/{menu_link}', [MenuLinkController::class, 'update'])->name('admin.menu_links.update');
 
     // Delete a menu link
     Route::delete('/menu_links/{menu_link}', [MenuLinkController::class, 'destroy'])->name('admin.menu_links.destroy');

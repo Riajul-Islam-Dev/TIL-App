@@ -13,27 +13,51 @@
                     <form method="post" action="{{ route('admin.menu_links.store') }}">
                         @csrf
 
-                        <!-- Add form fields for menu link creation, including menu_id, menu_name, url, and other required fields -->
+                        <div class="mb-4 flex flex-wrap">
+                            <div class="w-1/2 pr-2">
+                                <label for="menu_name"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Menu Name</label>
+                                <input type="text" name="menu_name" id="menu_name"
+                                    class="form-input rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700" />
+                                @error('menu_name')
+                                    <span class="text-red-600">{{ $message }}</span>
+                                @enderror
+                            </div>
 
-                        <div class="mb-4">
-                            <label for="menu_id"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Menu ID</label>
-                            <input type="text" name="menu_id" id="menu_id"
-                                class="form-input rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700" required />
+                            <div class="w-1/2 pl-2">
+                                <label for="url"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL</label>
+                                <input type="text" name="url" id="url"
+                                    class="form-input rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700" />
+                                @error('url')
+                                    <span class="text-red-600">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="menu_name"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Menu Name</label>
-                            <input type="text" name="menu_name" id="menu_name"
-                                class="form-input rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700" required />
-                        </div>
+                        <div class="mb-4 flex flex-wrap">
+                            <div class="w-1/2 pr-2">
+                                <label for="parent_id"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Parent
+                                    Menu</label>
+                                <select name="parent_id" id="parent_id"
+                                    class="form-select rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700">
+                                    <option value="">Select a Parent Menu (Optional)</option>
+                                    @foreach ($menuLinks as $menuLink)
+                                        <option value="{{ $menuLink->id }}">{{ $menuLink->menu_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <div class="mb-4">
-                            <label for="url"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL</label>
-                            <input type="text" name="url" id="url"
-                                class="form-input rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700" required />
+                            <div class="w-1/2 pl-2">
+                                <label for="menu_type"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Menu Type</label>
+                                <select name="menu_type" id="menu_type"
+                                    class="form-select rounded-md shadow-sm mt-1 block w-full dark:bg-gray-700">
+                                    <option value="Top-Nav">Top Navigation</option>
+                                    <option value="Side-Bar">Side Menu Bar</option>
+                                </select>
+                            </div>
                         </div>
 
                         <button type="submit"

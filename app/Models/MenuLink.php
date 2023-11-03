@@ -19,6 +19,7 @@ class MenuLink extends Model
         'menu_name', // Add any additional attributes you want to mass-assign
         'url',
         'parent_id',
+        'menu_type',
         'order',
     ];
 

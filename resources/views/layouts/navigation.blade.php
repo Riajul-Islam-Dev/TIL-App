@@ -5,7 +5,7 @@
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 @foreach (auth()->user()->permittedMenuLinks() as $menuLink)
-                    @if ($menuLink->menu_type === 'top nav')
+                    @if ($menuLink->menu_type === 'Top-Nav')
                         <x-nav-link :href="route($menuLink->url)" :active="request()->routeIs($menuLink->url)">
                             {{ $menuLink->menu_name }}
                         </x-nav-link>
