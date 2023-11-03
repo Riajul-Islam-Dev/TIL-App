@@ -2,16 +2,16 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
+            @php
+                $menuTree = App\Models\MenuLink::tree();
+            @endphp
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                @foreach (auth()->user()->permittedMenuLinks() as $menuLink)
-                    @if ($menuLink->menu_type === 'Top-Nav')
-                        <x-nav-link :href="route($menuLink->url)" :active="request()->routeIs($menuLink->url)">
-                            {{ $menuLink->menu_name }}
-                        </x-nav-link>
-                    @endif
+                @foreach ($menuTree as $menuLink)
+                    @include('admin.menu_links.menu_link_dropdown', ['menuLink' => $menuLink])
                 @endforeach
             </div>
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">

@@ -39,4 +39,26 @@ class MenuLink extends Model
         'parent_id' => 'integer',
         'order' => 'integer',
     ];
+
+    public static function tree()
+    {
+        $allMenuLinks = MenuLink::get();
+
+        $rootMenus = $allMenuLinks->whereNull('parent_id');
+
+        self::formatTree($rootMenus, $allMenuLinks);
+
+        return $rootMenus;
+    }
+
+    private static function formatTree($rootMenuLinks, $allMenuLinks)
+    {
+        foreach ($rootMenuLinks as $rootMenuLink) {
+            $rootMenuLink->children = $allMenuLinks->where('parent_id', $rootMenuLink->menu_id)->values();
+
+            if ($rootMenuLink->children->isNotEmpty()) {
+                self::formatTree($rootMenuLink->children, $allMenuLinks);
+            }
+        }
+    }
 }
