@@ -4,14 +4,18 @@
         <div class="flex justify-between h-16">
             @php
                 $menuTree = App\Models\MenuLink::tree();
+                // dd($menuTree);
             @endphp
+
             <!-- Navigation Links -->
-            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 @foreach ($menuTree as $menuLink)
                     @include('admin.menu_links.menu_link_dropdown', ['menuLink' => $menuLink])
                 @endforeach
+            </div> --}}
+            <div class="navigation">
+                @include('menu', ['menuLinks' => $menuTree])
             </div>
-
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -105,3 +109,26 @@
         </div>
     </div>
 </nav>
+@push('custom-scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const menuLinks = document.querySelectorAll(".menu-link");
+
+            menuLinks.forEach(function(link) {
+                link.addEventListener("mouseover", function() {
+                    const subMenu = link.querySelector(".sub-menu");
+                    if (subMenu) {
+                        subMenu.style.display = "block";
+                    }
+                });
+
+                link.addEventListener("mouseout", function() {
+                    const subMenu = link.querySelector(".sub-menu");
+                    if (subMenu) {
+                        subMenu.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

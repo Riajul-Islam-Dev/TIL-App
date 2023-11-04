@@ -42,23 +42,19 @@ class MenuLink extends Model
 
     public static function tree()
     {
-        $allMenuLinks = MenuLink::get();
+        $menuLinks = MenuLink::get();
+        $menuLinksByParentId = $menuLinks->groupBy('parent_id');
+        $rootMenuLinks = $menuLinksByParentId[null] ?? collect();
 
-        $rootMenus = $allMenuLinks->whereNull('parent_id');
-
-        self::formatTree($rootMenus, $allMenuLinks);
-
-        return $rootMenus;
+        return self::buildTree($rootMenuLinks, $menuLinksByParentId);
     }
 
-    private static function formatTree($rootMenuLinks, $allMenuLinks)
+    private static function buildTree($menuLinks, $menuLinksByParentId)
     {
-        foreach ($rootMenuLinks as $rootMenuLink) {
-            $rootMenuLink->children = $allMenuLinks->where('parent_id', $rootMenuLink->menu_id)->values();
-
-            if ($rootMenuLink->children->isNotEmpty()) {
-                self::formatTree($rootMenuLink->children, $allMenuLinks);
-            }
-        }
+        return $menuLinks->map(function ($menuLink) use ($menuLinksByParentId) {
+            $children = $menuLinksByParentId[$menuLink->menu_id] ?? collect();
+            $menuLink->children = $children->count() > 0 ? self::buildTree($children, $menuLinksByParentId) : collect();
+            return $menuLink;
+        });
     }
 }
