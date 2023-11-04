@@ -3,18 +3,25 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             @php
-                $menuTree = App\Models\MenuLink::tree();
-                // dd($menuTree);
+                $filteredMenuLinks = [];
+
+                foreach (
+                    auth()
+                        ->user()
+                        ->permittedMenuLinks()
+                    as $menuLink
+                ) {
+                    if ($menuLink->menu_type === 'Top-Nav') {
+                        $filteredMenuLinks[] = $menuLink;
+                    }
+                }
+
+                $menuTree = \App\Models\MenuLink::tree($filteredMenuLinks);
             @endphp
 
             <!-- Navigation Links -->
-            {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                @foreach ($menuTree as $menuLink)
-                    @include('admin.menu_links.menu_link_dropdown', ['menuLink' => $menuLink])
-                @endforeach
-            </div> --}}
             <div class="navigation">
-                @include('menu', ['menuLinks' => $menuTree])
+                @include('components.menu', ['menuLinks' => $menuTree])
             </div>
 
             <!-- Settings Dropdown -->
@@ -74,13 +81,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @foreach (auth()->user()->permittedMenuLinks() as $menuLink)
-                @if ($menuLink->menu_type === 'top nav')
-                    <x-nav-link :href="route($menuLink->url)" :active="request()->routeIs($menuLink->url)">
-                        {{ $menuLink->menu_name }}
-                    </x-nav-link>
-                @endif
-            @endforeach
+            <div class="navigation">
+                @include('components.menu', ['menuLinks' => $menuTree])
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->

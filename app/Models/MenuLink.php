@@ -20,7 +20,6 @@ class MenuLink extends Model
         'url',
         'parent_id',
         'menu_type',
-        'order',
     ];
 
     /**
@@ -37,17 +36,21 @@ class MenuLink extends Model
      */
     protected $casts = [
         'parent_id' => 'integer',
-        'order' => 'integer',
     ];
 
-    public static function tree()
+    public static function tree($menuLinks)
     {
-        $menuLinks = MenuLink::get();
-        $menuLinksByParentId = $menuLinks->groupBy('parent_id');
+        // Convert the array of menu links to a collection
+        $menuLinksCollection = collect($menuLinks);
+
+        // Now you can use the groupBy() method on the collection
+        $menuLinksByParentId = $menuLinksCollection->groupBy('parent_id');
+
         $rootMenuLinks = $menuLinksByParentId[null] ?? collect();
 
         return self::buildTree($rootMenuLinks, $menuLinksByParentId);
     }
+
 
     private static function buildTree($menuLinks, $menuLinksByParentId)
     {

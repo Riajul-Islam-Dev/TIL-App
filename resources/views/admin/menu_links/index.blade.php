@@ -25,7 +25,7 @@
                     </span>
                 </div>
             @endif
-            
+
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <a href="{{ route('admin.menu_links.create') }}"
@@ -58,10 +58,6 @@
                                     </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Order
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         Action
                                     </th>
                                 </tr>
@@ -74,7 +70,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $menuLink->menu_name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $menuLink->url }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $menuLink->parent_id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $menuLink->order }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex space-x-2">
                                                 <a href="{{ route('admin.menu_links.edit', $menuLink) }}"
